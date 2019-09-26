@@ -1,1 +1,417 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+* {
+    padding: 0;
+    margin: 0;
+    /*overflow: hidden;*/
+    /*font-family: 'LinotteRegular', serif*/
+}
+
+@font-face {
+    font-family: 'Gotham-Black';
+    src: url('./assets/fonts/GOTHAM-BLACK.ttf');
+}
+
+@font-face {
+    font-family: 'Gotham-BlackItalic';
+    src: url('./assets/fonts/GOTHAM-BLACKITALIC.ttf');
+}
+
+@font-face {
+    font-family: 'Gotham-Book';
+    src: url('./assets/fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-BookItalic';
+    src: url('./assets/fonts/Gotham-BookItalic.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-Medium';
+    src: url('./assets/fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-MediumItalic';
+    src: url('./assets/fonts/Gotham-MediumItalic.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-Thin';
+    src: url('./assets/fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-ThinItalic';
+    src: url('./assets/fonts/Gotham-ThinItalic.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-Ultra';
+    src: url('./assets/fonts/Gotham-Ultra.otf');
+}
+
+@font-face {
+    font-family: 'Gotham-UltraItalic';
+    src: url('./assets/fonts/Gotham-UltraItalic.otf');
+}
+
+@font-face {
+    font-family: 'Aquatico-Regular';
+    src: url('./assets/fonts/Aquatico-Regular.otf');
+}
+
+@font-face {
+    font-family: 'LinotteLight';
+    src: url('./assets/fonts/LinotteLight.otf');
+}
+
+@font-face {
+    font-family: 'LinotteRegular';
+    src: url('./assets/fonts/LinotteRegular.otf');
+}
+
+
+/*
+Set Fonts fast
+*/
+
+.Gotham-black {
+    font-family: 'Gotham-Black', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-UltraItalic {
+    font-family: 'Gotham-UltraItalic', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-Ultra {
+    font-family: 'Gotham-Ultra', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-ThinItalic {
+    font-family: 'Gotham-ThinItalic', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-Thin {
+    font-family: 'Gotham-Thin', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-MediumItalic {
+    font-family: 'Gotham-MediumItalic', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-Medium {
+    font-family: 'Gotham-Medium', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-BookItalic {
+    font-family: 'Gotham-BookItalic', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-Book {
+    font-family: 'Gotham-Book', Geneva, Tahoma, sans-serif;
+}
+
+.Gotham-BlackItalic {
+    font-family: 'Gotham-BlackItalic', Geneva, Tahoma, sans-serif;
+}
+
+.LinotteRegular {
+    font-family: 'LinotteRegular', Geneva, Tahoma, sans-serif;
+}
+
+.LinotteLight {
+    font-family: 'LinotteLight', Courier, monospace;
+}
+
+.Aquatico-Regular {
+    font-family: 'Aquatico-Regular', Courier, monospace;
+}
+
+
+/* Font sizes default */
+
+.font-18 {
+    font-size: 18px;
+}
+
+.font-22 {
+    font-size: 22px;
+}
+
+.font-10 {
+    font-size: 10px;
+}
+
+.font-12 {
+    font-size: 12px;
+}
+
+.font-17 {
+    font-size: 17px;
+}
+
+.font-20 {
+    font-size: 20px;
+}
+
+.font-25 {
+    font-size: 25px;
+}
+
+.font-28 {
+    font-size: 28px;
+}
+
+.font-30 {
+    font-size: 30px;
+}
+
+.font-24 {
+    font-size: 24px;
+}
+
+.font-16 {
+    font-size: 16px;
+}
+
+.font-14 {
+    font-size: 14px;
+}
+
+.font-60 {
+    font-size: 60px;
+}
+
+.font-69 {
+    font-size: 69px;
+}
+
+.font-55 {
+    font-size: 55px;
+}
+
+.font-50 {
+    font-size: 50px;
+}
+
+.font-45 {
+    font-size: 45px;
+}
+
+.font-65 {
+    font-size: 65px;
+}
+
+.font-70 {
+    font-size: 70px;
+}
+
+.font-71 {
+    font-size: 71px;
+}
+
+.font-30 {
+    font-size: 30px;
+}
+
+.font-36 {
+    font-size: 36px;
+}
+
+.font-37 {
+    font-size: 37px;
+}
+
+.font-38 {
+    font-size: 38px;
+}
+
+.font-32 {
+    font-size: 32px;
+}
+
+.font-132 {
+    font-size: 132px;
+}
+
+.font-127 {
+    font-size: 127px;
+}
+
+.font-153 {
+    font-size: 153px;
+}
+
+.font-100 {
+    font-size: 100px;
+}
+
+
+/* Separators */
+
+.space-5 {
+    height: 5px;
+}
+
+.space-10 {
+    height: 10px;
+}
+
+.space-15 {
+    height: 15px;
+}
+
+.space-20 {
+    height: 20px;
+}
+
+.space-25 {
+    height: 25px;
+}
+
+.space-30 {
+    height: 30px;
+}
+
+.space-35 {
+    height: 35px;
+}
+
+.space-40 {
+    height: 40px;
+}
+
+.space-45 {
+    height: 45px;
+}
+
+.space-50 {
+    height: 50px;
+}
+
+.space-55 {
+    height: 55px;
+}
+
+.space-60 {
+    height: 60px;
+}
+
+.space-65 {
+    height: 65px;
+}
+
+.space-70 {
+    height: 70px;
+}
+
+.space-75 {
+    height: 75px;
+}
+
+.space-80 {
+    height: 80px;
+}
+
+.space-85 {
+    height: 85px;
+}
+
+.space-90 {
+    height: 90px;
+}
+
+.space-95 {
+    height: 95px;
+}
+
+.space-100 {
+    height: 100px;
+}
+
+.space-105 {
+    height: 105px;
+}
+
+.space-110 {
+    height: 110px;
+}
+
+.space-115 {
+    height: 115px;
+}
+
+.space-120 {
+    height: 120px;
+}
+
+.space-125 {
+    height: 125px;
+}
+
+.space-130 {
+    height: 130px;
+}
+
+.space-135 {
+    height: 135px;
+}
+
+.space-140 {
+    height: 140px;
+}
+
+.space-145 {
+    height: 145px;
+}
+
+.space-150 {
+    height: 150px;
+}
+
+.space-155 {
+    height: 155px;
+}
+
+.space-160 {
+    height: 160px;
+}
+
+.space-165 {
+    height: 165px;
+}
+
+.space-170 {
+    height: 170px;
+}
+
+.space-175 {
+    height: 175px;
+}
+
+.space-180 {
+    height: 180px;
+}
+
+.space-185 {
+    height: 185px;
+}
+
+.space-190 {
+    height: 190px;
+}
+
+.space-195 {
+    height: 195px;
+}
+
+.space-200 {
+    height: 200px;
+}
+
+.mat-tab-label {
+    min-width: 80px!important;
+}

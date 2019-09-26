@@ -1,0 +1,34 @@
+.bg-primary-ccs {
+    background-color: #4783DE
+}
+
+.navbar-nav>li>a {
+    color: white !important;
+    padding: 20px;
+    font-weight: 100 !important;
+    font-family: 'Gotham-Book';
+    font-size: 15px
+}
+
+@media only screen and (min-width: 980px) {
+    .dropdown-menu {
+        background-color: #4783DE;
+        width: 200px !important;
+        height: 140px !important;
+    }
+    .dropdown-menu>a {
+        color: white !important;
+    }
+    .dropdown-menu>a:hover {
+        background: none;
+        color: white;
+    }
+    .nav-links>a {
+        color: white !important;
+        padding: 10px
+    }
+    .nav-links>a:hover {
+        background: none;
+        color: white;
+    }
+}

@@ -1,0 +1,100 @@
+.render-full-width {
+    background-color: #505763;
+    width: 100%;
+    padding-bottom: 60px;
+}
+
+.left-col {
+    float: left
+}
+
+.rigth-col {
+    float: right;
+}
+
+.lead-title {
+    color: white !important;
+    font-weight: bold;
+}
+
+.bg-card-resena {
+    background-color: #f7f8fa
+}
+
+.icon-blue {
+    color: #4783DE
+}
+
+.extra-course-bg {
+    background-color: #e8e9eb;
+}
+
+.extra-course-color {
+    color: #29303b !important
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.fab-button-dark {
+    background-color: #505763
+}
+
+.list-comments>mat-list-item {
+    padding: 50px
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+
+/*
+Desktops
+*/
+
+@media only screen and (min-width: 1400px) {
+    .card-sticky {
+        position: fixed;
+        /*z-index: 1000;*/
+        width: 20% !important
+    }
+    .banner-sticky {
+        position: fixed;
+        width: 100%;
+        padding: 0;
+        margin-top: -4.5%;
+        z-index: 1000;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1200px) {
+    .card-sticky {
+        position: fixed;
+        /*z-index: 1000;*/
+        width: 25% !important
+    }
+    .banner-sticky {
+        position: fixed;
+        width: 100%;
+        padding: 0;
+        margin-top: -7.5%;
+        z-index: 1000;
+    }
+}
+
+@media only screen and (min-width: 1210px) and (max-width: 1399px) {
+    .card-sticky {
+        position: fixed;
+        /*z-index: 1000;*/
+        width: 20% !important;
+    }
+    .banner-sticky {
+        position: fixed;
+        width: 100%;
+        padding: 0;
+        margin-top: -6.2%;
+        z-index: 1000;
+    }
+}
