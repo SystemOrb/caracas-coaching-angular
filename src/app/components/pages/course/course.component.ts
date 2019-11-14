@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestService } from '../../../services/server/rest.service';
 import { CourseDataClass } from 'src/app/classes/course.class';
 import { CourseMetaClass } from 'src/app/classes/course.meta.class';
 import { CourseDataSellerClass } from 'src/app/classes/course.sell.class';
 import { CourseCvClass } from '../../../classes/course.cv.class';
+import { CourseCommentData } from '../../../classes/course.comment.class';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { ContactComponent } from '../../static/entry/contact/contact.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-course',
@@ -20,9 +24,27 @@ export class CourseComponent implements OnInit {
   public CoursesCV: CourseCvClass[] = []; // Modulos del curso [Contenido]
   public CoursesSimilars: any[] = []; // Cursos similares
   public CourseThumbnail: CourseDataClass; // Foto del curso
+  public CourseComments: CourseCommentData[] = []; // Comentarios del curso
+  public CourseTax: any = '';
+  public stickyCourseBanner: boolean = false; // Si hace scroll muestra el banner superior
+  public StickyOnTheFooter: boolean = false; // Si llega al final del footer, debemos eliminar el sticky del curso
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
+    if (window.pageYOffset >= 1) {
+      this.stickyCourseBanner = true;
+    } else {
+      this.stickyCourseBanner = false;
+    }
+    // Final de la pagina dinamica por dispositivo
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      this.StickyOnTheFooter = true;
+    } else {
+      this.StickyOnTheFooter = false;
+    }
+  }
 
   constructor(private param: ActivatedRoute, private _course: RestService,
-              private route: Router) {
+              private route: Router, private dialog: MatDialog,
+              private snackBar: MatSnackBar, private title: Title) {
     this.param.queryParams.subscribe((get) => {
       if (get.post !== '' && (get.post) !== null && (get.post) !== undefined && (get.post)) {
         this.CourseId = get.post;
@@ -35,22 +57,29 @@ export class CourseComponent implements OnInit {
   async ngOnInit() {
     setTimeout(async () => {
       this.CourseDescription = await this.GetCourseDescription(); // Descripción del curso
-      console.log(this.CourseDescription);
+      this.title.setTitle(`Cursos - ${this.CourseDescription.post_title}`);
       this.CourseMetaData = await this.GetCourseMetaData(); // Variables del curso
+      this.CourseTax = await this.GetCurrentCourseTAX(); // Obtener info del valor del curso online
       this.CourseThumbnail = await this.GetThumbnail();
       this.CourseFeatures = await this.GetCourseFeatures(); // Caracteristicas del curso
       const ModuleSell = await this.GetCourseModuleSell(); // Modo de venta del curso
       if (ModuleSell !== null) {
         this.CourseModuleSell = ModuleSell[0];
-        console.log(this.CourseModuleSell);
       }
+      // Módulos del curso
       if (await this.GetCourseModulesCV() !== null) {
         this.CoursesCV = await this.GetCourseModulesCV(); // Curriculum del curso
         this.CoursesCV = await this.GetChildLessons(); // Lecciones del curso
       }
+      // Similares
       const courses = await this.GetSimilarCourses();
       if (courses !== null) {
         this.CoursesSimilars = courses;
+      }
+      // Comentarios
+      const coments = await this.GetCourseComments();
+      if (coments !== null) {
+        this.CourseComments = coments;
       }
     }, 500);
   }
@@ -240,5 +269,74 @@ export class CourseComponent implements OnInit {
         }
       }
     });
+  }
+  // Obtener los comentarios del curso
+  GetCourseComments(): Promise<CourseCommentData[]> {
+    return new Promise((resolve, reject) => {
+      this._course.GetInfoFormDB('GetComments', Number(this.CourseId), 'courses')
+      .subscribe((comments) => {
+        if (comments.status) {
+          // Tiene el precio
+          resolve(comments.data);
+        } else {
+          // Es gratis
+          resolve(null);
+        }
+      });
+    });
+  }
+  GetCurrentCourseTAX(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // Verificamos si el curso tiene descuento
+      const item: any = {
+        discount: null,
+        price: null
+      };
+      for (const fee of this.CourseMetaData) {
+        if (fee.meta_key === '_lp_sale_price') {
+          item.discount = fee;
+        }
+        if (fee.meta_key === '_lp_price') {
+          item.price = fee;
+        } else {
+          item.price = 'free';
+        }
+      }
+      resolve(item);
+    });
+  }
+  /*
+  Popup donde enviará la información del formulario
+  */
+ openDialog(interest: string): void {
+    const DialogRef = this.dialog.open(ContactComponent, {
+      data: {
+        description: this.CourseDescription,
+        META: this.CourseMetaData,
+        seller: this.CourseModuleSell,
+        tax: this.CourseTax,
+        interest
+      },
+      width: `${window.innerWidth}px`,
+      height: `${window.innerHeight}px`,
+      disableClose: true,
+      autoFocus: false
+    });
+    // Verificamos si envio o no el formulario
+    DialogRef.afterClosed().subscribe(
+      (data) => {
+        if (data.role === 'send') {
+          this.snackBar.open('Gracias por ponerte en contacto con nosotros, en breve serás atendido', null, {
+            duration: 8000
+          });
+        }
+      }
+    );
+  }
+  /*
+  Buy course
+  */
+ BuyCourseOnline(): void {
+    location.href = `https://caracascoaching.com/checkout?add-to-cart=${Number(this.CourseDescription.ID)}`;
   }
  }

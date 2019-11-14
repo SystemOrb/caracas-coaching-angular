@@ -1,0 +1,113 @@
+<div class="space-20"></div>
+<header class="d-md-none">
+    <button class="rigth-col" (click)="dialogRef.close();" color="primary" mat-fab>
+                <mat-icon class="material-icons">close</mat-icon>
+    </button>
+</header>
+<div class="col-md-1 rigth-col d-none d-md-block">
+    <button (click)="dialogRef.close();" color="primary" mat-fab>
+        <mat-icon class="material-icons">close</mat-icon>
+    </button>
+</div>
+<div class="space-20 d-none d-md-block"></div>
+<div class="space-70 d-md-none"></div>
+<section>
+    <div class="container">
+        <div class="row text-left">
+            <div class="col-sm text-left">
+                <h1 class="text-left LinotteRegular d-none d-md-block">
+                    Contácta con el equipo de ventas
+                </h1>
+                <h1 class="text-left LinotteRegular d-md-none font-16">
+                    Contácta con el equipo de ventas
+                </h1>
+                <form #formCourse="ngForm" ngNativeValidate (ngSubmit)="SendForm(formCourse);">
+                    <div class="form-row">
+                        <div class="col-sm col">
+                            <div class="form-group">
+                                <mat-form-field class="w-100" appearance="fill">
+                                    <mat-label>Nombre</mat-label>
+                                    <input required name="name" ngModel matInput type="text">
+                                    <mat-icon matSuffix>account_circle</mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm col">
+                            <div class="form-group">
+                                <mat-form-field class="w-100" appearance="fill">
+                                    <mat-label>Apellido</mat-label>
+                                    <input required name="lastname" ngModel matInput type="text">
+                                    <mat-icon matSuffix>how_to_reg</mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm col">
+                            <div class="form-group">
+                                <mat-form-field class="w-100" appearance="fill">
+                                    <mat-label>Correo electrónico</mat-label>
+                                    <input required name="email" ngModel matInput type="email">
+                                    <mat-icon matSuffix>inbox</mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm col">
+                            <div class="form-group">
+                                <mat-form-field class="w-100" appearance="fill">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input required name="phone" ngModel matInput type="text">
+                                    <mat-icon matSuffix>smartphone</mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm col">
+                            <div class="form-group">
+                                <mat-form-field class="w-100" appearance="fill">
+                                    <mat-label>Empresa</mat-label>
+                                    <input name="company" ngModel matInput type="text">
+                                    <mat-icon matSuffix>business</mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <mat-label>
+                            ¿En qué estás interesado?
+                        </mat-label><br>
+                        <mat-radio-group required name="task" [(ngModel)]="courseData.interest" aria-label="Select an option">
+                            <mat-radio-button value="abierta">Formación abierta</mat-radio-button>
+                            <mat-radio-button value="company">In Company</mat-radio-button>
+                            <mat-radio-button value="coaching">Coaching</mat-radio-button>
+                            <mat-radio-button value="consultoria">Consultoría</mat-radio-button>
+                            <mat-radio-button value="seleccion">Selección</mat-radio-button>
+                            <mat-radio-button value="otros">Otros</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="space-15"></div>
+                    <div class="form-group">
+                        <mat-form-field class="w-100" appearance="fill">
+                            <mat-label>Consulta</mat-label>
+                            <textarea required name="msg" [(ngModel)]="defaultMsgText" rows="10" cols="50" matInput placeholder="Inserte su consulta">
+                                    {{defaultMsgText}}
+                            </textarea>
+                            <mat-icon matSuffix>undo</mat-icon>
+                        </mat-form-field>
+                        <div class="space-15"></div>
+                        <mat-slide-toggle color="primary" required name="legacy" ngModel class="example-margin">
+                            Acepto los terminos y condiciones de Caracas coaching
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="form-group text-center">
+                        <button [disabled]="formCourse.invalid || loading" type="submit" mat-raised-button color="primary" class="LinotteRegular">
+                            Enviar
+                        </button>
+                    </div>
+                    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

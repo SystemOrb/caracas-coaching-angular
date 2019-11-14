@@ -84,6 +84,21 @@ Desktops
     }
 }
 
+@media only screen and (min-width: 768px) and (max-width: 980px) {
+    .card-sticky {
+        position: fixed;
+        width: 38% !important
+        /*z-index: 1000;*/
+    }
+    .banner-sticky {
+        position: fixed;
+        width: 100%;
+        padding: 0;
+        top: 0;
+        z-index: 1000;
+    }
+}
+
 @media only screen and (min-width: 1210px) and (max-width: 1399px) {
     .card-sticky {
         position: fixed;
@@ -97,4 +112,37 @@ Desktops
         margin-top: -6.2%;
         z-index: 1000;
     }
+}
+
+
+/*
+Mobile
+*/
+
+.mobile-full-width {
+    background-color: #505763;
+    width: 100%;
+}
+
+.no-bg {
+    background: transparent !important
+}
+
+.mat-list-item.mat-list-item-word-wrap {
+    height: initial !important;
+}
+
+.mat-list-item-word-wrap .mat-line {
+    word-wrap: break-word !important;
+    white-space: pre-wrap !important;
+}
+
+.sticky-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #29303b;
+    padding: 10px
 }

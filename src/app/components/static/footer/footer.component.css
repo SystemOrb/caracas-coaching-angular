@@ -18,3 +18,33 @@ address>a {
     text-decoration: none;
     color: white;
 }
+
+.link-creator {
+    color: #e4e4e4;
+    text-decoration: none;
+    font-weight: bold
+}
+
+.footer__links--main ul {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 110px;
+}
+
+.footer__links--main ul li {
+    flex: 25%;
+    flex-grow: 0;
+    list-style: none;
+}
+
+.footer__links--main ul li>a {
+    color: white;
+    text-decoration: none;
+    font-family: 'LinotteRegular', serif;
+}
+
+.link-main {
+    font-size: 16px;
+    font-weight: bold;
+}

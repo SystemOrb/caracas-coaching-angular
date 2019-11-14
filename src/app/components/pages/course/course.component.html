@@ -1,5 +1,5 @@
 <!-- Tablet to desktop -->
-<header class="d-none d-md-block banner-sticky">
+<header *ngIf="stickyCourseBanner" class="d-none d-md-block banner-sticky">
     <mat-toolbar style="background-color: rgba(83, 88, 97, 1) !important">
         <mat-toolbar-row class="text-center">
             <div class="container">
@@ -9,7 +9,7 @@
                             {{CourseDescription.post_title}}
                         </h1>
                     </div>
-                    <div *ngIf="CourseModuleSell.lp_online === '1' || CourseModuleSell.lp_type === 'all'" class="col-sm">
+                    <div (click)="openDialog('otros');" *ngIf="CourseModuleSell.lp_online === '1' || CourseModuleSell.lp_type === 'all'" class="col-sm">
                         <button mat-raised-button color="accent" class="btn-block col-4 LinotteRegular">
                             Comprar ahora
                         </button>
@@ -66,17 +66,22 @@
                 <div class="col-md-5 rigth-col">
                     <mat-card class="card-sticky">
                         <img mat-card-image [src]="CourseThumbnail.guid" [alt]="CourseThumbnail.post_title">
-                        <mat-tab-group class="bg-card-resena">
+                        <mat-tab-group *ngIf="!StickyOnTheFooter" class="bg-card-resena">
                             <mat-tab *ngIf="CourseModuleSell.lp_online === '1'" label="ONLINE">
                                 <mat-card class="bg-white">
                                     <div class="space-30"></div>
-                                    <h1 class="Gotham-Book text-center">
-                                        $11.99 - <span style="text-decoration: line-through" class="text-muted">$54</span>
+                                    <h1 *ngIf="CourseTax.discount !== null" class="Gotham-Book text-center">
+                                        <span>${{CourseTax.discount.meta_value}}</span> - <span style="text-decoration: line-through" class="text-muted">${{CourseTax.price.meta_value}}</span>
+                                    </h1>
+                                    <h1 class="Gotham-Book text-center" *ngIf="!CourseTax.discount">
+                                        <span>${{CourseTax.price.meta_value}}</span>
                                     </h1>
                                     <mat-card-footer>
-                                        <button class="text-center btn-block" mat-raised-button color="primary">
-                                            Comprar este curso
-                                        </button>
+                                        <form id="formBuy" method="post" enctype="multipart/form-data" action="https://caracascoaching.com/cart">
+                                            <button (click)="BuyCourseOnline();" type="submit" class="text-center btn-block" mat-raised-button color="primary">
+                                                Comprar este curso
+                                            </button>
+                                        </form>
                                         <div class="space-10"></div>
                                         <div class="text-center">
                                             <mat-card style="padding: 0px" class="bg-card-resena">
@@ -122,26 +127,26 @@
                                         <h5 class="LinotteRegular font-12 text-bold">
                                             Precio 1er inscrito
                                         </h5>
-                                        <div class="space-20"></div>
+                                        <div class="space-20 d-none d-lg-block"></div>
                                         <h1 class="LinotteRegular font-25 text-bold text-center">
                                             {{CourseModuleSell.lp_currency}} {{CourseModuleSell.lp_price_1}} SIN IVA
                                         </h1>
-                                        <div class="space-15"></div>
+                                        <div class="space-15 d-none d-lg-block"></div>
                                         <h5 class="LinotteRegular font-12 text-bold">
                                             Precio 2do inscrito y sucesivos
                                         </h5>
-                                        <div class="space-20"></div>
+                                        <div class="space-20 d-none d-lg-block"></div>
                                         <h1 class="LinotteRegular font-25 text-bold text-center">
                                             {{CourseModuleSell.lp_currency}} {{CourseModuleSell.lp_price_2}} SIN IVA
                                         </h1>
                                     </mat-card-content>
-                                    <mat-card-footer>
+                                    <mat-card-footer style="overflow: hidden">
                                         <div class="form-row">
                                             <div class="col-sm text-center">
-                                                <button class="btn-block" mat-raised-button color="primary">Comprar este curso presencial</button>
+                                                <button class="btn-block" mat-raised-button color="primary">Comprar curso</button>
                                             </div>
                                             <div class="col-sm text-center">
-                                                <button class="btn-block" mat-raised-button>Obtener más información</button>
+                                                <button (click)="openDialog('abierta');" class="btn-block" mat-raised-button>Más información</button>
                                             </div>
                                         </div>
                                     </mat-card-footer>
@@ -187,7 +192,7 @@
                                         </h1>
                                     </mat-card-content>
                                     <mat-card-footer>
-                                        <button mat-raised-button color="primary" class="btn-block LinotteRegular text-bold">
+                                        <button (click)="openDialog('company');" mat-raised-button color="primary" class="btn-block LinotteRegular text-bold">
                                             Solicitar presupuesto
                                         </button>
                                     </mat-card-footer>
@@ -208,13 +213,24 @@
                                         </article>
                                     </mat-card-content>
                                     <mat-card-footer>
-                                        <button mat-raised-button color="primary" class="btn-block LinotteRegular text-bold">
+                                        <button (click)="openDialog('consultoria');" mat-raised-button color="primary" class="btn-block LinotteRegular text-bold">
                                                     Solicitar consultoría
                                         </button>
                                     </mat-card-footer>
                                 </mat-card>
                             </mat-tab>
                         </mat-tab-group>
+                        <div *ngIf="StickyOnTheFooter" class="space-30"></div>
+                        <mat-card-footer *ngIf="StickyOnTheFooter && CourseModuleSell.lp_online === '1'">
+                            <button class="btn-block LinotteRegular" mat-raised-button color="primary">
+                                Comprar este curso
+                            </button>
+                        </mat-card-footer>
+                        <mat-card-footer *ngIf="StickyOnTheFooter && CourseModuleSell.lp_online === '0'">
+                            <button (click)="openDialog('otros');" class="btn-block LinotteRegular" mat-raised-button color="primary">
+                                    Solicitar más información
+                                </button>
+                        </mat-card-footer>
                     </mat-card>
                 </div>
             </div>
@@ -223,148 +239,481 @@
     <!-- content -->
     <div class="container">
         <div class="space-50"></div>
-        <div class="col-md-7 left-col">
-            <h3 class="text-dark Gotham-Book">Descripción</h3>
-            <article>
-                <p class="Gotham-Book font-12" [innerHTML]="CourseDescription.post_content"></p>
-            </article>
-        </div>
-        <div class="col-md-7 left-col">
-            <h3 class="text-dark Gotham-Book">Nota</h3>
-            <mat-card class="bg-card-resena">
-                <mat-card-content>
-                    <p class="Gotham-Book font-12" [innerHTML]="CourseDescription.post_excerpt"></p>
-                </mat-card-content>
-            </mat-card>
-        </div>
-        <div class="col-md-7 left-col">
-            <div class="space-40"></div>
-            <h3 class="text-dark Gotham-Book">Contenido del curso</h3>
-            <mat-accordion>
-                <mat-expansion-panel *ngFor="let cv of CoursesCV" class="bg-card-resena">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            {{cv.section_name}}
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <mat-card *ngFor="let child of cv.child" class="bg-card-resena">
-                        <mat-card-header>
-                            <mat-icon class="material-icons">insert_drive_file</mat-icon>
-                            <mat-hint class="Gotham-Book text-dark font-12">
-                                {{child.post_title}}
-                            </mat-hint>
-                        </mat-card-header>
-                    </mat-card>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-        <div class="col-md-7 left-col">
-            <div class="space-40"></div>
-            <h3 class="text-dark Gotham-Book">Características del curso</h3>
-            <mat-card class="bg-card-resena">
-                <mat-list>
-                    <mat-list-item *ngFor="let f of CourseFeatures">
-                        <mat-icon class="icon-blue" mat-list-icon>{{f.icon}}</mat-icon>
-                        <h4 class="Gotham-Book font-12" mat-line>{{f.label}}:&nbsp; {{f.meta_value}}</h4>
-                        <mat-divider style="margin-left: 10% !important" class="w-75"></mat-divider>
-                    </mat-list-item>
-                </mat-list>
-            </mat-card>
-        </div>
-        <div *ngIf="CoursesSimilars.length >= 1" class="col-md-7 left-col">
-            <div class="space-40"></div>
-            <mat-card class="bg-light">
-                <mat-card-header>
-                    <h3 class="Gotham-Book">
-                        Cursos similares
-                    </h3>
-                </mat-card-header>
-                <mat-card-content>
-                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="row text-center">
-                                    <div *ngFor="let item of CoursesSimilars" class="col-sm">
-                                        <mat-card (click)="Navigate(item.post_name, item.post_id);" class="extra-course-bg pointer">
-                                            <img mat-card-image [src]="item.item" [alt]="item.post_title">
-                                            <mat-card-content>
-                                                <mat-chip-list>
-                                                    <mat-chip class="text-center" color="primary" selected>Admin</mat-chip>
-                                                </mat-chip-list>
-                                                <div class="space-10"></div>
-                                                <h3 class="Gotham-Book font-16 extra-course-color">
-                                                    {{item.post_title}}
-                                                </h3>
-                                                <span *ngIf="item.price.meta_value" class="text-right font-25 LinotteRegular text-bold">
-                                                    $ {{item.price.meta_value}} <span *ngIf="item.price.price" style="text-decoration: line-through" class="text-muted">- ${{item.price.price}}</span>
-                                                </span>
-                                                <span *ngIf="item.price === 'free'" class="Gotham-Book text-success font-25">
-                                                    Free
-                                                </span>
-                                            </mat-card-content>
-                                        </mat-card>
+        <div class="row">
+            <div class="col-md-7 left-col">
+                <h3 class="text-dark Gotham-Book">Descripción</h3>
+                <article>
+                    <p class="Gotham-Book font-12" [innerHTML]="CourseDescription.post_content"></p>
+                </article>
+            </div>
+            <div class="col-md-7 left-col">
+                <h3 class="text-dark Gotham-Book">Nota</h3>
+                <mat-card class="bg-card-resena">
+                    <mat-card-content>
+                        <p class="Gotham-Book font-12" [innerHTML]="CourseDescription.post_excerpt"></p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-md-7 left-col">
+                <div class="space-40"></div>
+                <h3 class="text-dark Gotham-Book">Contenido del curso</h3>
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let cv of CoursesCV" class="bg-card-resena">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{cv.section_name}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-card *ngFor="let child of cv.child" class="bg-card-resena">
+                            <mat-card-header>
+                                <mat-icon class="material-icons">insert_drive_file</mat-icon>
+                                <mat-hint class="Gotham-Book text-dark font-12">
+                                    {{child.post_title}}
+                                </mat-hint>
+                            </mat-card-header>
+                        </mat-card>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+            <div class="col-md-7 left-col">
+                <div class="space-40"></div>
+                <h3 class="text-dark Gotham-Book">Características del curso</h3>
+                <mat-card class="bg-card-resena">
+                    <mat-list>
+                        <mat-list-item *ngFor="let f of CourseFeatures">
+                            <mat-icon class="icon-blue" mat-list-icon>{{f.icon}}</mat-icon>
+                            <h4 class="Gotham-Book font-12" mat-line>{{f.label}}:&nbsp; {{f.meta_value}}</h4>
+                            <mat-divider style="margin-left: 10% !important" class="w-75"></mat-divider>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card>
+            </div>
+            <div *ngIf="CoursesSimilars.length >= 1" class="col-md-7 left-col">
+                <div class="space-40"></div>
+                <mat-card class="bg-light">
+                    <mat-card-header>
+                        <h3 class="Gotham-Book">
+                            Cursos similares
+                        </h3>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row text-center">
+                                        <div *ngFor="let item of CoursesSimilars" class="col-sm">
+                                            <mat-card (click)="Navigate(item.post_name, item.post_id);" class="extra-course-bg pointer">
+                                                <img mat-card-image [src]="item.item" [alt]="item.post_title">
+                                                <mat-card-content>
+                                                    <mat-chip-list>
+                                                        <mat-chip class="text-center" color="primary" selected>Admin</mat-chip>
+                                                    </mat-chip-list>
+                                                    <div class="space-10"></div>
+                                                    <h3 class="Gotham-Book font-16 extra-course-color">
+                                                        {{item.post_title}}
+                                                    </h3>
+                                                    <span *ngIf="item.price.meta_value" class="text-right font-25 LinotteRegular text-bold">
+                                                        $ {{item.price.meta_value}} <span *ngIf="item.price.price" style="text-decoration: line-through" class="text-muted">- ${{item.price.price}}</span>
+                                                    </span>
+                                                    <span *ngIf="item.price === 'free'" class="Gotham-Book text-success font-25">
+                                                        Free
+                                                    </span>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
-        <!-- Comentarios -->
-        <div class="col-md-7 left-col">
-            <div class="space-30"></div>
-            <h3 class="text-dark Gotham-Book">Comentarios</h3>
-            <mat-list class="list-comments">
-                <mat-list-item>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <button onclick="return false;" class="fab-button-dark" mat-fab>
-                                <mat-icon class="material-icons">person</mat-icon>
-                            </button>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <!-- Comentarios -->
+            <div class="col-md-7 left-col">
+                <div class="space-30"></div>
+                <h3 class="text-dark Gotham-Book">Comentarios</h3>
+                <mat-list class="mat-list-item-word-wrap" *ngIf="CourseComments.length >= 1" class="list-comments">
+                    <mat-list-item *ngFor="let c of CourseComments">
+                        <div class="row">
+                            <div class="col-sm">
+                                <button onclick="return false;" class="fab-button-dark" mat-mini-fab>
+                                    <mat-icon class="material-icons">person</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col-sm">
+                                <h3 mat-line class="text-dark Gotham-Book font-12">{{c.comment_date | date}}</h3>
+                                <h3 mat-line class="text-dark Gotham-Book font-12">{{c.comment_author}}</h3>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <h3 mat-line class="text-dark Gotham-Book font-16">13/12/19</h3>
-                            <h3 mat-line class="text-dark Gotham-Book">Carlos Estarita</h3>
-                        </div>
-                        <div class="col-sm">
+                        <div class="space-30"></div>
+                        <div class="col-sm-12 text-center">
                             <article>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.?
+                                <p class="font-12 LinotteRegular">
+                                    {{c.comment_content}}
                                 </p>
                             </article>
                         </div>
-                    </div>
-                    <div class="space-20"></div>
-                    <mat-divider></mat-divider>
-                    <div class="space-20"></div>
-                </mat-list-item>
-                <mat-list-item>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <button onclick="return false;" class="fab-button-dark" mat-fab>
-                                <mat-icon class="material-icons">person</mat-icon>
-                            </button>
-                        </div>
-                        <div class="col-md-3">
-                            <h3 mat-line class="text-dark Gotham-Book font-16">13/12/19</h3>
-                            <h3 mat-line class="text-dark Gotham-Book">Carlos Estarita</h3>
-                        </div>
-                        <div class="col-sm">
-                            <article>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.?
-                                </p>
-                            </article>
-                        </div>
-                    </div>
-                    <mat-divider></mat-divider>
-                    <div class="space-10"></div>
-                </mat-list-item>
-            </mat-list>
+                        <div class="space-20"></div>
+                        <mat-divider></mat-divider>
+                        <div class="space-20"></div>
+                    </mat-list-item>
+                </mat-list>
+                <mat-hint *ngIf="CourseComments.length <= 0" class="LinotteRegular">Este curso aun no tiene comentarios</mat-hint>
+            </div>
         </div>
     </div>
 </section>
-
+<!-- end tablet to desktop -->
+<!--mobile -->
+<section class="d-md-none">
+    <div class="mobile-full-width">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="space-20"></div>
+                    <mat-card class="no-bg">
+                        <img mat-card-image [src]="CourseThumbnail.guid" [alt]="CourseThumbnail.post_title">
+                        <mat-card-content class="text-left">
+                            <h1 class="LinotteRegular text-white font-22">
+                                {{CourseDescription.post_title}}
+                            </h1>
+                            <p class="lead-text text-white Gotham-Book">
+                                <mat-hint class="text-white font-14">
+                                    {{CourseDescription.post_excerpt}}
+                                </mat-hint>
+                            </p>
+                            <p class="lead-text text-white Gotham-Book">
+                                <mat-hint class="text-white font-14">
+                                    <div class="row">
+                                        <div class="col-3">Creado por:</div>
+                                        <div class="col">
+                                            <mat-chip-list>
+                                                <mat-chip>Admin</mat-chip>
+                                            </mat-chip-list>
+                                        </div>
+                                    </div>
+                                </mat-hint>
+                            </p>
+                            <p class="lead-text text-white Gotham-Book">
+                                <mat-hint class="text-white font-14">
+                                    <div class="row">
+                                        <div class="col-3">Última actualización:</div>
+                                        <div class="col">
+                                            <mat-chip-list>
+                                                <mat-chip>{{CourseDescription.post_modified_gmt | date}}</mat-chip>
+                                            </mat-chip-list>
+                                        </div>
+                                    </div>
+                                </mat-hint>
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="space-10"></div>
+    <div class="container">
+        <!-- Course tabs -->
+        <div class="row">
+            <div class="col text-left">
+                <mat-tab-group class="bg-card-resena">
+                    <mat-tab *ngIf="CourseModuleSell.lp_online === '1'" label="ONLINE">
+                        <mat-card class="bg-white">
+                            <h1 *ngIf="CourseTax.discount !== null" class="Gotham-Book">
+                                <span>${{CourseTax.discount.meta_value}}</span> - <span style="text-decoration: line-through" class="text-muted">${{CourseTax.price.meta_value}}</span>
+                            </h1>
+                            <h1 class="Gotham-Book" *ngIf="!CourseTax.discount">
+                                <span>${{CourseTax.price.meta_value}} IVA Exento</span>
+                            </h1>
+                            <mat-card-footer>
+                                <button (click)="BuyCourseOnline();" class="text-center btn-block" mat-raised-button color="primary">
+                                        Comprar este curso
+                                </button>
+                            </mat-card-footer>
+                        </mat-card>
+                    </mat-tab>
+                    <mat-tab *ngIf="CourseModuleSell.lp_type === 'all' || CourseModuleSell.lp_type === 'abierta' || CourseModuleSell.lp_type === 'a-c' || CourseModuleSell.lp_type === 'a-m'" label="PRESENCIAL">
+                        <mat-card class="bg-white">
+                            <mat-card-content>
+                                <mat-list class="item-sell">
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon class="material-icons">crop_free</mat-icon>
+                                        <h4 style="font-size: 12px !important" class="Gotham-Book text-bold" mat-line>Referencia: {{CourseModuleSell.lp_ref}}</h4>
+                                        <div class="space-10"></div>
+                                        <mat-divider></mat-divider>
+                                        <div class="space-10"></div>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon class="material-icons">timer</mat-icon>
+                                        <h4 style="font-size: 12px !important" class="Gotham-Book text-bold" mat-line>Duración: {{CourseModuleSell.lp_dur}}</h4>
+                                        <div class="space-10"></div>
+                                        <mat-divider></mat-divider>
+                                        <div class="space-10"></div>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon class="material-icons">room</mat-icon>
+                                        <h4 style="font-size: 12px !important" class="Gotham-Book text-bold" mat-line>Ubicación: {{CourseModuleSell.lp_room}}</h4>
+                                        <div class="space-10"></div>
+                                        <mat-divider></mat-divider>
+                                        <div class="space-10"></div>
+                                    </mat-list-item>
+                                </mat-list>
+                                <div class="space-15"></div>
+                                <h5 class="LinotteRegular font-12 text-bold">
+                                    Precio 1er inscrito
+                                </h5>
+                                <div class="space-20"></div>
+                                <h1 class="LinotteRegular font-25 text-bold text-center">
+                                    {{CourseModuleSell.lp_currency}} {{CourseModuleSell.lp_price_1}} SIN IVA
+                                </h1>
+                                <div class="space-15"></div>
+                                <h5 class="LinotteRegular font-12 text-bold">
+                                    Precio 2do inscrito y sucesivos
+                                </h5>
+                                <div class="space-20"></div>
+                                <h1 class="LinotteRegular font-25 text-bold text-center">
+                                    {{CourseModuleSell.lp_currency}} {{CourseModuleSell.lp_price_2}} SIN IVA
+                                </h1>
+                            </mat-card-content>
+                            <mat-card-footer>
+                                <div class="form-row">
+                                    <div class="col-sm text-center">
+                                        <button class="btn-block" mat-raised-button color="primary">Comprar curso</button>
+                                    </div>
+                                    <div class="col-sm text-center">
+                                        <button (click)="openDialog('abierta');" class="btn-block" mat-raised-button>Más información</button>
+                                    </div>
+                                </div>
+                            </mat-card-footer>
+                        </mat-card>
+                    </mat-tab>
+                    <mat-tab *ngIf="CourseModuleSell.lp_type === 'all' || CourseModuleSell.lp_type === 'company' || CourseModuleSell.lp_type === 'a-c' || CourseModuleSell.lp_type === 'c-m'" label="COMPANY">
+                        <mat-card class="bg-white">
+                            <mat-card-content>
+                                <mat-list class="item-sell">
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon class="material-icons">crop_free</mat-icon>
+                                        <h4 style="font-size: 12px !important" class="Gotham-Book text-bold" mat-line>Referencia: {{CourseModuleSell.lp_ref}}</h4>
+                                        <div class="space-10"></div>
+                                        <mat-divider></mat-divider>
+                                        <div class="space-10"></div>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon class="material-icons">timer</mat-icon>
+                                        <h4 style="font-size: 12px !important" class="Gotham-Book text-bold" mat-line>Duración: {{CourseModuleSell.lp_dur}}</h4>
+                                        <div class="space-10"></div>
+                                        <mat-divider></mat-divider>
+                                        <div class="space-10"></div>
+                                    </mat-list-item>
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon class="material-icons">room</mat-icon>
+                                        <h4 style="font-size: 12px !important" class="Gotham-Book text-bold" mat-line>Ubicación: {{CourseModuleSell.lp_room}}</h4>
+                                        <div class="space-10"></div>
+                                        <mat-divider></mat-divider>
+                                        <div class="space-10"></div>
+                                    </mat-list-item>
+                                </mat-list>
+                                <div class="space-15"></div>
+                                <h5 class="LinotteRegular font-12 text-bold">
+                                    <mat-icon class="material-icons">people</mat-icon>&nbsp; Precio in company
+                                </h5>
+                                <div class="space-20"></div>
+                                <h1 class="LinotteRegular font-25 text-bold text-center">
+                                    {{CourseModuleSell.lp_currency}} {{CourseModuleSell.lp_price_group}} SIN IVA
+                                    <br>
+                                    <mat-hint class="text-muted LinotteRegular font-12 text-center">
+                                        Precio hasta {{CourseModuleSell.lp_group_max}} personas
+                                    </mat-hint>
+                                </h1>
+                            </mat-card-content>
+                            <mat-card-footer>
+                                <button (click)="openDialog('company');" mat-raised-button color="primary" class="btn-block LinotteRegular text-bold">
+                                    Solicitar presupuesto
+                                </button>
+                            </mat-card-footer>
+                        </mat-card>
+                    </mat-tab>
+                    <mat-tab *ngIf="CourseModuleSell.lp_type === 'all' || CourseModuleSell.lp_type === 'medida' || CourseModuleSell.lp_type === 'a-m' || CourseModuleSell.lp_type === 'c-m'" label="A MEDIDA">
+                        <mat-card class="bg-white">
+                            <mat-card-content>
+                                <article>
+                                    <p style="color: #7c8288" class="text-center Gotham-Book font-12">
+                                        <button mat-mini-fab color="warn">
+                                            <mat-icon class="material-icons">business</mat-icon>
+                                        </button> <br> ¿Quieres desarrollar un proyecto específico para tu organización?
+                                    </p>
+                                    <p style="color: #7c8288" class="text-center Gotham-Book font-12">
+                                        Un equipo de consultores está a tu disposición para ofrecerte un contenido adaptado, a medida de tus objetivos.
+                                    </p>
+                                </article>
+                            </mat-card-content>
+                            <mat-card-footer>
+                                <button (click)="openDialog('consultoria');" mat-raised-button color="primary" class="btn-block LinotteRegular text-bold">
+                                        Solicitar consultoría
+                                </button>
+                            </mat-card-footer>
+                        </mat-card>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+        <!-- end Tabs -->
+        <div class="space-30"></div>
+        <!-- Features-->
+        <div class="container">
+            <div class="row text-left">
+                <h4 class="LinotteRegular text-center">Este curso contiene</h4>
+                <mat-card class="bg-card-resena">
+                    <mat-list>
+                        <mat-list-item *ngFor="let f of CourseFeatures">
+                            <mat-icon class="icon-blue" mat-list-icon>{{f.icon}}</mat-icon>
+                            <h4 style="font-size: 10px !important" class="Gotham-Book font-12" mat-line>{{f.label}}:&nbsp; {{f.meta_value}}</h4>
+                            <mat-divider style="margin-left: 10% !important" class="w-75"></mat-divider>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card>
+            </div>
+        </div>
+        <!-- end Features -->
+        <!-- Subheader -->
+        <div class="space-30"></div>
+        <div class="container">
+            <div class="row text-left">
+                <mat-card class="bg-card-resena">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h4 class="LinotteRegular text-center">Nota</h4>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p class="Gotham-Book font-12" [innerHTML]="CourseDescription.post_excerpt"></p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <!-- end subheader -->
+        <!-- Description -->
+        <div class="space-30"></div>
+        <div class="container">
+            <div class="row text-left">
+                <mat-card class="bg-card-resena">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h4 class="LinotteRegular text-center">Descripción</h4>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p class="Gotham-Book font-12" [innerHTML]="CourseDescription.post_content"></p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <!-- end Description -->
+        <!-- Similars -->
+        <div class="space-30"></div>
+        <div class="container">
+            <div class="row text-left">
+                <mat-card class="bg-card-resena">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h4 class="LinotteRegular text-center">Cursos similares</h4>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div id="carouselMobileSlidesOnly" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row text-center">
+                                        <div *ngFor="let item of CoursesSimilars" class="col-12">
+                                            <mat-card (click)="Navigate(item.post_name, item.post_id);" class="extra-course-bg pointer">
+                                                <img mat-card-image [src]="item.item" [alt]="item.post_title">
+                                                <mat-card-content>
+                                                    <mat-chip-list>
+                                                        <mat-chip class="text-center" color="primary" selected>Admin</mat-chip>
+                                                    </mat-chip-list>
+                                                    <div class="space-10"></div>
+                                                    <h3 class="Gotham-Book font-16 extra-course-color">
+                                                        {{item.post_title}}
+                                                    </h3>
+                                                    <span *ngIf="item.price.meta_value" class="text-right font-25 LinotteRegular text-bold">
+                                                                $ {{item.price.meta_value}} <span *ngIf="item.price.price" style="text-decoration: line-through" class="text-muted">- ${{item.price.price}}</span>
+                                                    </span>
+                                                    <span *ngIf="item.price === 'free'" class="Gotham-Book text-success font-25">
+                                                                Free
+                                                            </span>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <!-- end Similars -->
+        <!-- Coments -->
+        <div class="space-30"></div>
+        <div class="container">
+            <div class="row text-left">
+                <div class="col-12">
+                    <mat-card class="bg-card-resena">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h4 class="LinotteRegular text-center">Comentarios</h4>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-list class="mat-list-item-word-wrap" *ngIf="CourseComments.length >= 1">
+                                <mat-list-item *ngFor="let c of CourseComments">
+                                    <h3 mat-line class="text-dark LinotteRegular font-12">{{c.comment_author}}</h3>
+                                    <p style="font-size: 10px !important" class="font-10 LinotteRegular" mat-line>{{c.comment_content}}</p>
+                                    <div class="space-20"></div>
+                                    <mat-divider></mat-divider>
+                                    <div class="space-10"></div>
+                                </mat-list-item>
+                            </mat-list>
+                            <mat-hint *ngIf="CourseComments.length <= 0" class="LinotteRegular">Este curso aun no tiene comentarios</mat-hint>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        <!-- end Coments -->
+        <!-- Description -->
+        <div class="space-30"></div>
+        <div *ngIf="!StickyOnTheFooter" class="sticky-mobile">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col">
+                        <h1 class="text-left LinotteRegular text-white font-12">
+                            {{CourseDescription.post_title}}
+                        </h1>
+                    </div>
+                    <div class="col">
+                        <div *ngIf="CourseModuleSell.lp_online === '1' || CourseModuleSell.lp_type === 'all'" class="col-sm">
+                            <button mat-raised-button color="accent" class="btn-block  LinotteRegular">
+                                Comprar curso
+                            </button>
+                        </div>
+                        <div *ngIf="CourseModuleSell.lp_online !== '1'" class="col-sm">
+                            <button (click)="openDialog('otros');" mat-raised-button color="accent" class="btn-block  LinotteRegular">
+                                Cotizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end Description -->
+    </div>
+</section>
+<!-- end mobile -->
+<div class="space-80"></div>
+<section>
+    <app-footer></app-footer>
+</section>
 <!-- footer -->
 <!-- End tablet to desktop-->

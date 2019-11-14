@@ -1,0 +1,11 @@
+.rigth-col {
+    float: right
+}
+
+.mat-radio-button~.mat-radio-button {
+    margin-left: 25px;
+}
+
+textarea {
+    resize: none !important;
+}

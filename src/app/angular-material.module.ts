@@ -24,6 +24,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 @NgModule({
   imports: [
     CommonModule,
@@ -54,7 +55,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatRadioModule,
     MatProgressBarModule,
     MatChipsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSlideToggleModule
   ],
   exports: [
     MatButtonModule,
@@ -84,7 +86,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatRadioModule,
     MatProgressBarModule,
     MatChipsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSlideToggleModule
   ],
   declarations: []
 })

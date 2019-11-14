@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../angular-material.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { RestService } from './server/rest.service';
 import { GlobalService } from './global/global.service';
 
@@ -16,7 +16,8 @@ import { GlobalService } from './global/global.service';
   imports: [
     CommonModule,
     AngularMaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    HttpClientJsonpModule
   ]
 })
 export class ServicesModule { }
